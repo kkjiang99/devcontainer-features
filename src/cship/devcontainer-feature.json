@@ -1,6 +1,6 @@
 {
   "id": "cship",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "CShip (Claude Code Statusline)",
   "description": "Install cship + starship for Claude Code statusline, with sensible default configs",
   "documentationURL": "https://github.com/kkjiang99/devcontainer-features",
