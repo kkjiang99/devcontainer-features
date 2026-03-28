@@ -1,0 +1,17 @@
+{
+  "id": "claude-code",
+  "version": "1.0.0",
+  "name": "Claude Code",
+  "description": "Install Claude Code CLI and ensure it is on PATH",
+  "documentationURL": "https://github.com/kkjiang99/devcontainer-features",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of Claude Code to install (default: latest)"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
