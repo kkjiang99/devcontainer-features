@@ -1,0 +1,23 @@
+{
+  "id": "cship",
+  "version": "1.0.0",
+  "name": "CShip (Claude Code Statusline)",
+  "description": "Install cship + starship for Claude Code statusline, with sensible default configs",
+  "documentationURL": "https://github.com/kkjiang99/devcontainer-features",
+  "options": {
+    "cshipVersion": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of cship to install (default: latest)"
+    },
+    "starshipVersion": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of starship to install (default: latest)"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/kkjiang99/devcontainer-features/claude-code"
+  ]
+}
