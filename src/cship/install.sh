@@ -20,27 +20,35 @@ fi
 echo "starship installed: $(starship --version | head -1)"
 
 # --- 2. 安裝 cship ---
+# 不使用官方 install.sh，因為它會讀 /dev/tty 互動提示，Docker build 時會失敗
 echo "Installing cship (version: ${CSHIP_VERSION})..."
-curl -fsSL https://cship.dev/install.sh | bash
 
-# 尋找 cship binary
-CSHIP_BIN=""
-for candidate in /root/.local/bin/cship "${HOME}/.local/bin/cship" /usr/local/bin/cship; do
-    if [ -f "${candidate}" ]; then
-        CSHIP_BIN="${candidate}"
-        break
-    fi
-done
+ARCH=$(uname -m)
+case "$ARCH" in
+    x86_64)  TARGET="x86_64-unknown-linux-musl" ;;
+    aarch64) TARGET="aarch64-unknown-linux-musl" ;;
+    *)       echo "ERROR: Unsupported architecture: $ARCH"; exit 1 ;;
+esac
 
-if [ -z "${CSHIP_BIN}" ]; then
-    echo "ERROR: cship binary not found after install"
-    exit 1
+if [ "${CSHIP_VERSION}" = "latest" ]; then
+    CSHIP_URL="https://github.com/stephenleo/cship/releases/latest/download/cship-${TARGET}"
+else
+    CSHIP_URL="https://github.com/stephenleo/cship/releases/download/v${CSHIP_VERSION}/cship-${TARGET}"
 fi
 
-# 建立全域 symlink
-ln -sf "${CSHIP_BIN}" /usr/local/bin/cship
+mkdir -p /root/.local/bin
+curl -fsSL "${CSHIP_URL}" -o /root/.local/bin/cship
+chmod +x /root/.local/bin/cship
+ln -sf /root/.local/bin/cship /usr/local/bin/cship
 
 echo "cship installed: $(cship --version 2>/dev/null || echo 'ok')"
+
+# --- 2b. 安裝 libsecret-tools（cship usage limits 在 Linux 上需要） ---
+if command -v apt-get &> /dev/null; then
+    apt-get update -qq && apt-get install -y -qq libsecret-tools > /dev/null 2>&1 \
+        && echo "libsecret-tools installed" \
+        || echo "WARNING: libsecret-tools install failed, usage limits may not work"
+fi
 
 # --- 3. 寫入預設 config（若不存在則建立） ---
 # 這些 config 會被 bind mount 覆蓋（如果有的話）
