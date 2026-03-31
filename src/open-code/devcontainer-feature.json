@@ -1,6 +1,6 @@
 {
   "id": "open-code",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "Open Code",
   "description": "Install Open Code CLI and ensure it is on PATH",
   "documentationURL": "https://github.com/kkjiang99/devcontainer-features",

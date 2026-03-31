@@ -15,7 +15,7 @@ fi
 
 # 尋找 opencode binary（可能在 /root/.local/bin 或其他位置）
 OPENCODE_BIN=""
-for candidate in /root/.local/bin/opencode "${HOME}/.local/bin/opencode" /usr/local/bin/opencode; do
+for candidate in /root/.opencode/bin/opencode "${HOME}/.opencode/bin/opencode" /root/.local/bin/opencode "${HOME}/.local/bin/opencode" /usr/local/bin/opencode; do
     if [ -f "${candidate}" ]; then
         OPENCODE_BIN="${candidate}"
         break
