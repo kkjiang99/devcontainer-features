@@ -7,10 +7,16 @@ echo "Installing Open Code (version: ${VERSION})..."
 
 # Feature install 階段一律以 root 身份執行
 # 安裝 Open Code CLI
-if [ "${VERSION}" = "latest" ]; then
+# 注意：devcontainer feature 框架會 export VERSION 環境變數，
+# opencode installer 也會讀 $VERSION，導致 "vlatest" 錯誤。
+# 必須先儲存再 unset，安裝完再還原。
+_OPENCODE_VERSION="${VERSION}"
+unset VERSION
+
+if [ "${_OPENCODE_VERSION}" = "latest" ]; then
     curl -fsSL https://opencode.ai/install | bash
 else
-    curl -fsSL https://opencode.ai/install | bash -s -- --version "${VERSION}"
+    curl -fsSL https://opencode.ai/install | bash -s -- --version "${_OPENCODE_VERSION}"
 fi
 
 # 尋找 opencode binary（可能在 /root/.local/bin 或其他位置）
