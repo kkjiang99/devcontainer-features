@@ -1,0 +1,12 @@
+{
+  "id": "graphify",
+  "version": "1.0.0",
+  "name": "Graphify (Knowledge Graph Generator)",
+  "description": "Install graphify CLI for generating knowledge graphs from code, docs, and other inputs",
+  "documentationURL": "https://github.com/kkjiang99/devcontainer-features",
+  "options": {},
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/kkjiang99/devcontainer-features/claude-code"
+  ]
+}
