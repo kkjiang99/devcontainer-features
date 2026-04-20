@@ -1,0 +1,17 @@
+{
+  "id": "codex",
+  "version": "1.0.0",
+  "name": "Codex",
+  "description": "Install Codex CLI and ensure it is on PATH",
+  "documentationURL": "https://github.com/kkjiang99/devcontainer-features",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of Codex to install (default: latest)"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

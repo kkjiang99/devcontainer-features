@@ -79,9 +79,45 @@
 
 ---
 
+### `codex`
+
+安裝 Codex CLI 至任何 devcontainer。
+
+需先確保容器內已有 Node.js / npm。此 feature 只負責安裝 Codex CLI，不額外安裝 Node runtime。
+
+```json
+{
+  "features": {
+    "ghcr.io/kkjiang99/devcontainer-features/codex:1": {}
+  }
+}
+```
+
+| 選項 | 類型 | 預設值 | 說明 |
+|------|------|--------|------|
+| `version` | string | `latest` | 安裝的 Codex 版本 |
+
+#### 建議的 mount 設定
+
+讓 Codex 設定與登入狀態在 container rebuild 後保留：
+
+```json
+{
+  "mounts": [
+    "source=${localEnv:HOME}/.codex,target=/root/.codex,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.codex/auth.json,target=/root/.codex/auth.json,type=bind,consistency=cached"
+  ],
+  "remoteEnv": {
+    "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}"
+  }
+}
+```
+
+---
+
 ## 完整範例
 
-使用全部三個 features 搭配 docker-compose 的 devcontainer.json：
+使用全部四個 features 搭配 docker-compose 的 devcontainer.json：
 
 ```json
 {
@@ -93,14 +129,18 @@
   "features": {
     "ghcr.io/kkjiang99/devcontainer-features/claude-code:1": {},
     "ghcr.io/kkjiang99/devcontainer-features/cship:1": {},
-    "ghcr.io/kkjiang99/devcontainer-features/open-code:1": {}
+    "ghcr.io/kkjiang99/devcontainer-features/open-code:1": {},
+    "ghcr.io/kkjiang99/devcontainer-features/codex:1": {}
   },
   "mounts": [
     "source=${localEnv:HOME}/.claude,target=/root/.claude,type=bind,consistency=cached",
-    "source=${localEnv:HOME}/.claude.json,target=/root/.claude.json,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.claude.json,target=/root/.claude.json,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.codex,target=/root/.codex,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.codex/auth.json,target=/root/.codex/auth.json,type=bind,consistency=cached"
   ],
   "remoteEnv": {
-    "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
+    "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}",
+    "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}"
   }
 }
 ```
