@@ -19,9 +19,13 @@ else
     npm install -g "@openai/codex@${VERSION}"
 fi
 
-# 尋找 codex binary（通常會在 npm global bin）
+# 尋找 codex binary。npm 10 已移除 `npm bin`，因此改用 prefix 與套件目錄回推。
 CODEX_BIN=""
-for candidate in /usr/local/bin/codex /usr/bin/codex /root/.npm-global/bin/codex "${HOME}/.npm-global/bin/codex"; do
+for candidate in "$(command -v codex 2>/dev/null || true)" /usr/local/bin/codex /usr/bin/codex /root/.npm-global/bin/codex "${HOME}/.npm-global/bin/codex"; do
+    if [ -z "${candidate}" ]; then
+        continue
+    fi
+
     if [ -f "${candidate}" ]; then
         CODEX_BIN="${candidate}"
         break
@@ -29,9 +33,24 @@ for candidate in /usr/local/bin/codex /usr/bin/codex /root/.npm-global/bin/codex
 done
 
 if [ -z "${CODEX_BIN}" ]; then
-    NPM_GLOBAL_BIN="$(npm bin -g 2>/dev/null || true)"
-    if [ -n "${NPM_GLOBAL_BIN}" ] && [ -f "${NPM_GLOBAL_BIN}/codex" ]; then
-        CODEX_BIN="${NPM_GLOBAL_BIN}/codex"
+    NPM_GLOBAL_PREFIX="$(npm prefix -g 2>/dev/null || true)"
+    for candidate in \
+        "${NPM_GLOBAL_PREFIX}/bin/codex" \
+        "${NPM_GLOBAL_PREFIX}/lib/node_modules/@openai/codex/bin/codex.js" \
+        "/usr/local/lib/node_modules/@openai/codex/bin/codex.js" \
+        "/usr/lib/node_modules/@openai/codex/bin/codex.js"
+    do
+        if [ -f "${candidate}" ]; then
+            CODEX_BIN="${candidate}"
+            break
+        fi
+    done
+fi
+
+if [ -z "${CODEX_BIN}" ]; then
+    NPM_GLOBAL_ROOT="$(npm root -g 2>/dev/null || true)"
+    if [ -n "${NPM_GLOBAL_ROOT}" ] && [ -f "${NPM_GLOBAL_ROOT}/@openai/codex/bin/codex.js" ]; then
+        CODEX_BIN="${NPM_GLOBAL_ROOT}/@openai/codex/bin/codex.js"
     fi
 fi
 

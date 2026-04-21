@@ -1,6 +1,6 @@
 {
   "id": "codex",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "Codex",
   "description": "Install Codex CLI and ensure it is on PATH",
   "documentationURL": "https://github.com/kkjiang99/devcontainer-features",
